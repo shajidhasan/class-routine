@@ -19,5 +19,13 @@
     "start_url": "/",
     "scope": "/",
     "orientation": "portrait-primary",
-    "description": "Class routine app for Mechanical Engineering Level 4 Term 1."
+    "description": "Class routine app for Mechanical Engineering Level 4 Term 1.",
+    "screenshots": [
+        {
+            "src": "/home.png",
+            "sizes": "540x960",
+            "type": "image/png",
+            "form_factor": "narrow"
+        }
+    ]
 }
