@@ -53,12 +53,12 @@
 
 {#if installButtonVisible}
 	<div class="border-b border-gray-700 bg-gray-900 shadow-lg" transition:slide>
-		<div class="container mx-auto px-6">
-			<div class="flex items-center justify-between gap-4 py-3">
-				<div class="flex items-center gap-4">
-					<div class="flex-shrink-0">
+		<div class="container mx-auto px-4 sm:px-6">
+			<div class="flex flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+				<div class="flex min-w-0 flex-1 items-start gap-3 sm:items-center sm:gap-4">
+					<div class="mt-0.5 flex-shrink-0 sm:mt-0">
 						<svg
-							class="h-8 w-8 text-gray-500"
+							class="h-6 w-6 text-gray-500 sm:h-8 sm:w-8"
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
 							viewBox="0 0 24 24"
@@ -72,15 +72,19 @@
 							/>
 						</svg>
 					</div>
-					<div>
-						<p class="font-semibold text-white">Install App for Faster Access</p>
-						<p class="text-sm text-gray-400">Add to your home screen for a native experience.</p>
+					<div class="min-w-0 flex-1">
+						<p class="text-sm font-semibold text-white sm:text-base">
+							Install App for Faster Access
+						</p>
+						<p class="mt-0.5 text-xs text-gray-400 sm:text-sm">
+							Add to your home screen for a native experience.
+						</p>
 					</div>
 				</div>
 
-				<div class="flex flex-shrink-0 items-center gap-2">
+				<div class="flex flex-shrink-0 items-center gap-2 self-end sm:self-auto">
 					<button
-						class="bg-primary-600 hover:bg-primary-700 focus-visible:ring-primary-500 inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none"
+						class="bg-primary-600 hover:bg-primary-700 focus-visible:ring-primary-500 inline-flex items-center justify-center rounded px-3 py-1.5 text-xs font-semibold text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 focus-visible:outline-none sm:px-4 sm:py-2 sm:text-sm"
 						onclick={handleInstallApp}
 					>
 						Install
@@ -88,11 +92,11 @@
 
 					<button
 						aria-label="Dismiss"
-						class="p-2 text-gray-500 transition-colors hover:bg-gray-800 hover:text-gray-300 focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:outline-none"
+						class="rounded p-1.5 text-gray-500 transition-colors hover:bg-gray-800 hover:text-gray-300 focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:outline-none sm:p-2"
 						onclick={handleDismiss}
 					>
 						<svg
-							class="h-5 w-5"
+							class="h-4 w-4 sm:h-5 sm:w-5"
 							xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 20 20"
 							fill="currentColor"
