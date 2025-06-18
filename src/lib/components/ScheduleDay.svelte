@@ -27,7 +27,7 @@
 			<div class="flex gap-4 border border-dashed border-gray-700 bg-gray-800/50 p-4">
 				<div class="text-2xl">🎉</div>
 				<div>
-					<div class="text-lg font-semibold text-gray-200">No Classes</div>
+					<div class="font-semibold text-gray-200">No classes</div>
 					<div class="text-sm text-gray-400">Enjoy your day off!</div>
 				</div>
 			</div>
