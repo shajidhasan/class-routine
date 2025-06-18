@@ -102,15 +102,16 @@
 
 	<main class="container mx-auto {isDebugModeEnabled ? 'pt-40 pb-6' : 'py-6'}">
 		<header class="mb-6 px-6">
-			<h1 class="mb-2 text-2xl font-bold tracking-tight text-white">Class Routine</h1>
-			<div class="text-lg font-medium text-gray-200">Mechanical Engineering • Level 4, Term 1</div>
-			<div class="mt-2 text-sm">
-				<span class="font-bold text-gray-200">{formatTime(currentTime)}</span>
-
-				<span class="text-sm text-gray-400">
-					{formatDate(currentTime)}
+			<div class="flex items-center gap-3">
+				<h1 class="text-2xl font-bold tracking-tight text-white">Mechanical Engineering</h1>
+				<span class="inline-block bg-blue-500/30 px-3 py-1 text-sm font-bold text-blue-200">
+					4-1
 				</span>
 			</div>
+			<p class="mt-2 text-sm text-gray-400">
+				<strong class="font-bold text-gray-200">{formatTime(currentTime)}</strong>
+				<span class="ml-2">{formatDate(currentTime)}</span>
+			</p>
 		</header>
 
 		<SectionSelector {currentSection} onSectionChange={handleSectionChange} />

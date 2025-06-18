@@ -9,7 +9,7 @@
 </script>
 
 <div
-	class="w-48 flex-shrink-0 snap-start overflow-hidden border border-gray-800 bg-gray-900 p-3 hover:border-gray-600"
+	class="w-50 flex-shrink-0 snap-start overflow-hidden border border-gray-800 bg-gray-900 p-3 hover:border-gray-600"
 >
 	<div class="flex h-full flex-col">
 		<div class="flex items-start justify-between">
