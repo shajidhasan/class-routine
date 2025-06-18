@@ -30,7 +30,7 @@
 			>
 				{classItem.code}
 			</div>
-			<div class="font-mono text-xs text-gray-500">{classItem.time}</div>
+			<div class="font-mono text-xs text-gray-300">{classItem.time}</div>
 		</div>
 
 		<div class="mt-3 text-base leading-tight font-semibold text-gray-100">
