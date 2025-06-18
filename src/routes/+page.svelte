@@ -5,6 +5,7 @@
 	import DebugSimulator from '$lib/components/DebugSimulator.svelte';
 	import SectionSelector from '$lib/components/SectionSelector.svelte';
 	import ScheduleDay from '$lib/components/ScheduleDay.svelte';
+	import InstallPwa from '$lib/components/InstallPWA.svelte';
 
 	let isDebugModeEnabled = $state<boolean>(false);
 	let currentSection = $state<Section>('A');
@@ -89,6 +90,8 @@
 </script>
 
 <div>
+	<InstallPwa />
+
 	<DebugSimulator
 		{isDebugModeEnabled}
 		{isSimulating}
