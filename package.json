@@ -40,6 +40,6 @@
 		]
 	},
 	"dependencies": {
-		"@fontsource/unifontex": "^5.2.5"
+		"@fontsource/space-mono": "^5.2.7"
 	}
 }

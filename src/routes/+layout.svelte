@@ -1,5 +1,5 @@
 <script lang="ts">
-	import '@fontsource/unifontex';
+	import '@fontsource/space-mono';
 	import '../app.css';
 	import { onMount } from 'svelte';
 

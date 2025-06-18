@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-mono: 'UnifontEX', monospace;
+  --font-mono: 'Space Mono', monospace;
 
   --color-primary-50: oklch(0.969 0.015 12.422);
   --color-primary-100: oklch(0.941 0.03 12.58);
