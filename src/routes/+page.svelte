@@ -104,7 +104,9 @@
 		<header class="mb-6 px-6">
 			<div class="flex items-center gap-3">
 				<h1 class="text-2xl font-bold tracking-tight text-white">Mechanical Engineering</h1>
-				<span class="inline-block bg-blue-500/30 px-3 py-1 text-sm font-bold text-blue-200">
+				<span
+					class="inline-block shrink-0 bg-blue-500/30 px-3 py-1 text-sm font-bold text-blue-200"
+				>
 					4-1
 				</span>
 			</div>
