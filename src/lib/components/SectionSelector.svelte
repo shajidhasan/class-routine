@@ -27,7 +27,12 @@
 				class:text-white={currentSection === section}
 				class:text-gray-400={currentSection !== section}
 			>
-				Section {section}
+				{#if currentSection === section}
+					<span> Section </span>
+				{/if}
+				<span>
+					{section}
+				</span>
 			</button>
 		{/each}
 	</div>
