@@ -11,7 +11,7 @@
 	let { classItem, isCurrentClass = false, showTeachers = false, progress }: Props = $props();
 
 	const cardClasses = $derived(`
-		relative w-72 flex-shrink-0 overflow-hidden p-3 pb-4 snap-start
+		relative w-60 flex-shrink-0 overflow-hidden p-3 pb-4 snap-start
 		${
 			isCurrentClass
 				? 'bg-green-900/50 border-2 border-green-500 shadow-lg shadow-green-900/50 current-class'
@@ -23,7 +23,13 @@
 <div class={cardClasses}>
 	<div class="relative flex h-full flex-col">
 		<div class="flex items-start justify-between">
-			<div class="text-primary-400 text-sm font-bold">{classItem.code}</div>
+			<div
+				class:text-primary-400={!classItem.sessional}
+				class:text-yellow-400={classItem.sessional}
+				class="text-sm font-bold"
+			>
+				{classItem.code}
+			</div>
 			<div class="font-mono text-xs text-gray-500">{classItem.time}</div>
 		</div>
 

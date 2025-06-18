@@ -9,11 +9,17 @@
 </script>
 
 <div
-	class="w-56 flex-shrink-0 snap-start overflow-hidden border border-gray-800 bg-gray-900 p-3 hover:border-gray-600"
+	class="w-48 flex-shrink-0 snap-start overflow-hidden border border-gray-800 bg-gray-900 p-3 hover:border-gray-600"
 >
 	<div class="flex h-full flex-col">
 		<div class="flex items-start justify-between">
-			<div class="text-primary-400 text-sm font-bold">{classItem.code}</div>
+			<div
+				class:text-primary-400={!classItem.sessional}
+				class:text-yellow-400={classItem.sessional}
+				class="text-sm font-bold"
+			>
+				{classItem.code}
+			</div>
 			<div class="font-mono text-xs text-gray-500">{classItem.time}</div>
 		</div>
 

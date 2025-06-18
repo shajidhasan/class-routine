@@ -39,35 +39,43 @@ export const routine: Record<DayName, TimeSlot[]> = {
 export const courseDetails: Record<string, CourseInfo> = {
     ME413: {
         name: 'Power Plant Engineering',
-        teachers: ['Dr. Bodius Salam', 'Dr. Kazi Afzalur Rahman']
+        teachers: ['Dr. Bodius Salam', 'Dr. Kazi Afzalur Rahman'],
+        sessional: false
     },
     ME461: {
         name: 'Production and Operations Management',
-        teachers: ['Dr. Md. Sanaul Rabbi', 'Dr. Md. Abu Mowazzem Hossain']
+        teachers: ['Dr. Md. Sanaul Rabbi', 'Dr. Md. Abu Mowazzem Hossain'],
+        sessional: false
     },
     ME451: {
         name: 'Machine Tools and Tool Engineering',
-        teachers: ['Dr. Md. Arafat Rahman', 'Mr. Redoy Masum Meraz']
+        teachers: ['Dr. Md. Arafat Rahman', 'Mr. Redoy Masum Meraz'],
+        sessional: false
     },
     ME431: {
         name: 'Machine Design-II',
-        teachers: ['Mr. Syed Masrur Ahmmad', 'Mr. Minhaz Ahmed']
+        teachers: ['Mr. Syed Masrur Ahmmad', 'Mr. Minhaz Ahmed'],
+        sessional: false
     },
     ME417: {
         name: 'Refrigeration and Air-conditioning',
-        teachers: ['Dr. Jamal Uddin Ahamed', 'Mr. Md. Aminul Islam']
+        teachers: ['Dr. Jamal Uddin Ahamed', 'Mr. Md. Aminul Islam'],
+        sessional: false
     },
     ME452: {
         name: 'Machine Tools and Tool Engineering',
-        teachers: ['Dr. Md. Sanaul Rabbi', 'Dr. Md. Arafat Rahman', 'Mr. Redoy Masum Meraz']
+        teachers: ['Dr. Md. Sanaul Rabbi', 'Dr. Md. Arafat Rahman', 'Mr. Redoy Masum Meraz'],
+        sessional: true
     },
     ME432: {
         name: 'Machine Design-II',
-        teachers: ['Mr. Syed Masrur Ahmmad', 'Mr. Redoy Masum Meraz', 'Mr. Minhaz Ahmed']
+        teachers: ['Mr. Syed Masrur Ahmmad', 'Mr. Redoy Masum Meraz', 'Mr. Minhaz Ahmed'],
+        sessional: true
     },
     ME494: {
         name: 'Project and Thesis',
-        teachers: ['Corresponding Supervisors']
+        teachers: ['Corresponding Supervisors'],
+        sessional: true
     }
 };
 

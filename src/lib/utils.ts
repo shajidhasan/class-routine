@@ -33,23 +33,19 @@ export function parseTime(timeStr: string): Date {
     return date;
 }
 
-// --- MODIFIED FUNCTION ---
 export function getCurrentStatus(
     daySchedule: TimeSlot[],
     currentTime: Date,
-    section: Section // <-- 1. ADDED SECTION PARAMETER
+    section: Section
 ): ClassStatus {
-    // 2. FILTER THE SCHEDULE FOR THE SPECIFIC SECTION FIRST
     const sectionDaySchedule = daySchedule.filter(
         (slot) => slot[`section${section}` as keyof TimeSlot]
     );
 
-    // If the section has no classes on this day, return 'no-classes'
     if (!sectionDaySchedule || sectionDaySchedule.length === 0) return { status: 'no-classes' };
 
     const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
 
-    // 3. USE THE FILTERED SCHEDULE FOR THE REST OF THE LOGIC
     for (let i = 0; i < sectionDaySchedule.length; i++) {
         const slot = sectionDaySchedule[i];
         const [startTime, endTime] = slot.time.split(' - ');
@@ -65,12 +61,9 @@ export function getCurrentStatus(
         }
 
         if (currentMinutes < startMinutes) {
-            // If it's before the very first class of the section
             if (i === 0) {
                 return { status: 'before-classes' };
             }
-
-            // It's a break between two classes for this section
             const prevSlot = sectionDaySchedule[i - 1];
             const [prevEndTime] = prevSlot.time.split(' - ').slice(1);
             const [prevEndHour, prevEndMinute] = prevEndTime.split(':').map(Number);
@@ -81,11 +74,8 @@ export function getCurrentStatus(
             return { status: 'break', nextIndex: i, progress: breakProgress };
         }
     }
-
-    // If the loop finishes, it means we are after the last class of the section
     return { status: 'after-classes' };
 }
-// --- END OF MODIFIED FUNCTION ---
 
 export function getClassesForSection(daySchedule: TimeSlot[], section: Section): ClassItem[] {
     if (!daySchedule) return [];
@@ -100,7 +90,8 @@ export function getClassesForSection(daySchedule: TimeSlot[], section: Section):
                 time: slot.time,
                 code: courseCode,
                 name: courseInfo?.name || 'Unknown Course',
-                teachers: courseInfo?.teachers || []
+                teachers: courseInfo?.teachers || [],
+                sessional: courseInfo?.sessional || false
             };
         })
         .filter((item): item is ClassItem => item !== null);
@@ -114,70 +105,46 @@ export function getDaySchedule(dayIndex: number): TimeSlot[] {
     return routine[dayName] || [];
 }
 
+// --- MODIFIED FUNCTION ---
 export function getScheduleData(currentTime: Date, currentSection: Section): ScheduleDay[] {
-    const today = currentTime.getDay();
-    const todaySchedule = getDaySchedule(today);
-
+    const todayIndex = currentTime.getDay();
+    const todaySchedule = getDaySchedule(todayIndex);
     const todayStatus = getCurrentStatus(todaySchedule, currentTime, currentSection);
 
+    const startDayIndex =
+        todayStatus.status === 'after-classes' || todayStatus.status === 'no-classes'
+            ? (todayIndex + 1) % 7
+            : todayIndex;
 
     const scheduleData: ScheduleDay[] = [];
+    const tomorrowIndex = (todayIndex + 1) % 7;
 
-    if (todayStatus.status === 'after-classes' || todayStatus.status === 'no-classes') {
-        scheduleData.push({
-            title: `Today (${dayLabels[today]})`,
-            classes: getClassesForSection(todaySchedule, currentSection),
-            isOffDay: getClassesForSection(todaySchedule, currentSection).length === 0, // Check if section has classes
-            highlight: false
-        });
+    for (let i = 0; i < 7; i++) {
+        const currentDayIndex = (startDayIndex + i) % 7;
+        const daySchedule = getDaySchedule(currentDayIndex);
+        const classes = getClassesForSection(daySchedule, currentSection);
 
-        const tomorrowIndex = (today + 1) % 7;
-        const tomorrowSchedule = getDaySchedule(tomorrowIndex);
-        scheduleData.push({
-            title: `Tomorrow (${dayLabels[tomorrowIndex]})`,
-            classes: getClassesForSection(tomorrowSchedule, currentSection),
-            isOffDay: getClassesForSection(tomorrowSchedule, currentSection).length === 0,
-            highlight: true,
-        });
-
-        for (let i = 2; i < 7; i++) {
-            const dayIndex = (today + i) % 7;
-            const daySchedule = getDaySchedule(dayIndex);
-            scheduleData.push({
-                title: dayLabels[dayIndex],
-                classes: getClassesForSection(daySchedule, currentSection),
-                isOffDay: getClassesForSection(daySchedule, currentSection).length === 0,
-                highlight: false
-            });
+        let title: string;
+        if (currentDayIndex === todayIndex) {
+            title = `Today (${dayLabels[currentDayIndex]})`;
+        } else if (currentDayIndex === tomorrowIndex) {
+            title = `Tomorrow (${dayLabels[currentDayIndex]})`;
+        } else {
+            title = dayLabels[currentDayIndex];
         }
-    } else {
-        const yesterdayIndex = (today - 1 + 7) % 7;
-        const yesterdaySchedule = getDaySchedule(yesterdayIndex);
-        scheduleData.push({
-            title: `Yesterday (${dayLabels[yesterdayIndex]})`,
-            classes: getClassesForSection(yesterdaySchedule, currentSection),
-            isOffDay: getClassesForSection(yesterdaySchedule, currentSection).length === 0,
-            highlight: false,
-        });
 
-        scheduleData.push({
-            title: `Today (${dayLabels[today]})`,
-            classes: getClassesForSection(todaySchedule, currentSection),
-            status: todayStatus,
-            isOffDay: getClassesForSection(todaySchedule, currentSection).length === 0,
-            highlight: true
-        });
+        const dayData: ScheduleDay = {
+            title: title,
+            classes: classes,
+            isOffDay: classes.length === 0,
+            highlight: i === 0
+        };
 
-        for (let i = 1; i < 6; i++) {
-            const dayIndex = (today + i) % 7;
-            const daySchedule = getDaySchedule(dayIndex);
-            scheduleData.push({
-                title: dayLabels[dayIndex],
-                classes: getClassesForSection(daySchedule, currentSection),
-                isOffDay: getClassesForSection(daySchedule, currentSection).length === 0,
-                highlight: false
-            });
+        if (currentDayIndex === todayIndex) {
+            dayData.status = todayStatus;
         }
+
+        scheduleData.push(dayData);
     }
 
     return scheduleData;

@@ -8,6 +8,7 @@ export interface TimeSlot {
 export interface CourseInfo {
     name: string;
     teachers: string[];
+    sessional: boolean;
 }
 
 export interface ClassItem {
@@ -15,6 +16,7 @@ export interface ClassItem {
     code: string;
     name: string;
     teachers: string[];
+    sessional: boolean;
 }
 
 export interface ClassStatus {
