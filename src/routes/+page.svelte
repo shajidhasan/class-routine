@@ -130,7 +130,7 @@
 					</div>
 				{:else if day.status?.status === 'break'}
 					<div
-						class="relative overflow-hidden rounded-2xl border border-amber-800/50 bg-amber-950/30 p-4"
+						class="relative mb-4 overflow-hidden rounded-2xl border border-amber-800/50 bg-amber-950/30 p-4"
 						transition:slide
 					>
 						<div class="flex items-center gap-3">
