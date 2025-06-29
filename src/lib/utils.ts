@@ -1,5 +1,5 @@
-import type { TimeSlot, ClassStatus, ClassItem, Section, ScheduleDay } from '$lib/types';
-import { routine, courseDetails, dayNames, dayLabels } from '$lib/data';
+import type { TimeSlot, ClassStatus, ClassItem, Section, ScheduleDay } from './types';
+import { routine, courseDetails, dayNames, dayLabels } from './data';
 
 export function formatTimeFromMinutes(minutes: number): string {
     const hours = Math.floor(minutes / 60);

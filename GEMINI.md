@@ -1,0 +1,4 @@
+- Always use `pnpm` if needed
+- No need to run or build the app yourself, assume there is a dev server going on
+- This is Svelte 5, not 4. So if something looks off, it's probably due to the recent API change
+- This is TailwindCSS V4 and it no longer has `tailwind.config.ts` configurations, everything is controlled from the `app.css` file only
