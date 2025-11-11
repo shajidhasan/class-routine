@@ -77,13 +77,18 @@ export function getCurrentStatus(
     return { status: 'after-classes' };
 }
 
-export function getClassesForSection(daySchedule: TimeSlot[], section: Section): ClassItem[] {
+export function getClassesForSection(daySchedule: TimeSlot[], section: Section, selectedElective?: string): ClassItem[] {
     if (!daySchedule) return [];
 
     return daySchedule
         .map((slot): ClassItem | null => {
-            const courseCode = slot[`section${section}` as keyof TimeSlot] as string | undefined;
+            let courseCode = slot[`section${section}` as keyof TimeSlot] as string | undefined;
             if (!courseCode) return null;
+
+            // Replace ELECTIVE placeholder with selected elective course
+            if (courseCode === 'ELECTIVE') {
+                courseCode = selectedElective || 'ELECTIVE';
+            }
 
             const courseInfo = courseDetails[courseCode.split(' ')[0]];
             return {
@@ -106,7 +111,7 @@ export function getDaySchedule(dayIndex: number): TimeSlot[] {
 }
 
 // --- MODIFIED FUNCTION ---
-export function getScheduleData(currentTime: Date, currentSection: Section): ScheduleDay[] {
+export function getScheduleData(currentTime: Date, currentSection: Section, selectedElective?: string): ScheduleDay[] {
     const todayIndex = currentTime.getDay();
     const todaySchedule = getDaySchedule(todayIndex);
     const todayStatus = getCurrentStatus(todaySchedule, currentTime, currentSection);
@@ -122,7 +127,7 @@ export function getScheduleData(currentTime: Date, currentSection: Section): Sch
     for (let i = 0; i < 7; i++) {
         const currentDayIndex = (startDayIndex + i) % 7;
         const daySchedule = getDaySchedule(currentDayIndex);
-        const classes = getClassesForSection(daySchedule, currentSection);
+        const classes = getClassesForSection(daySchedule, currentSection, selectedElective);
 
         let title: string;
         if (currentDayIndex === todayIndex) {

@@ -2,82 +2,102 @@ import type { DayName, TimeSlot, CourseInfo } from '$lib/types';
 
 export const routine: Record<DayName, TimeSlot[]> = {
     sunday: [
-        { time: '09:00 - 09:50', sectionA: 'ME461', sectionB: 'ME431', sectionC: 'ME451' },
-        { time: '09:50 - 10:40', sectionA: 'ME451', sectionB: 'ME461', sectionC: 'ME431' },
-        { time: '11:00 - 11:50', sectionA: 'ME431', sectionB: 'ME451', sectionC: 'ME461' },
-        { time: '14:30 - 17:00', sectionA: 'ME494', sectionB: 'ME494', sectionC: 'ME494' }
+        { time: '09:00 - 09:50', sectionA: 'ME411', sectionB: 'ME463' },
+        { time: '09:50 - 10:40', sectionB: 'ME411', sectionC: 'ME463' },
+        { time: '11:00 - 11:50', sectionA: 'ME463', sectionC: 'ME411' },
+        { time: '11:50 - 12:40', sectionA: 'ELECTIVE', sectionB: 'ELECTIVE', sectionC: 'ELECTIVE' },
+        { time: '14:30 - 17:00', sectionA: 'ME412', sectionC: 'ME422' }
     ],
     monday: [
-        { time: '09:00 - 09:50', sectionA: 'ME461', sectionB: 'ME413', sectionC: 'ME431' },
-        { time: '09:50 - 10:40', sectionA: 'ME431', sectionB: 'ME451', sectionC: 'ME413' },
-        { time: '11:00 - 11:50', sectionA: 'ME451', sectionB: 'ME431', sectionC: 'ME461' },
-        { time: '11:50 - 12:40', sectionA: 'ME413', sectionB: 'ME461', sectionC: 'ME451' },
-        { time: '14:30 - 17:00', sectionA: 'ME452 (A1/A2)', sectionC: 'ME432 (C1/C2)' }
+        { time: '09:00 - 09:50', sectionA: 'ME455', sectionB: 'ME411', sectionC: 'ME463' },
+        { time: '09:50 - 10:40', sectionA: 'ME463', sectionB: 'ME455', sectionC: 'ME411' },
+        { time: '11:00 - 11:50', sectionA: 'ME411', sectionB: 'ME463', sectionC: 'ME455' },
+        { time: '11:50 - 12:40', sectionA: 'ELECTIVE', sectionB: 'ELECTIVE', sectionC: 'ELECTIVE' },
+        { time: '14:30 - 17:00', sectionA: 'ME412', sectionB: 'ME456' }
     ],
     tuesday: [
-        { time: '09:00 - 09:50', sectionA: 'ME413', sectionB: 'ME461', sectionC: 'ME417' },
-        { time: '09:50 - 10:40', sectionA: 'ME417', sectionB: 'ME413', sectionC: 'ME461' },
-        { time: '11:00 - 11:50', sectionA: 'ME461', sectionB: 'ME417', sectionC: 'ME413' },
-        { time: '14:30 - 17:00', sectionB: 'ME432 (B1/B2)', sectionC: 'ME452 (C1/C2)' }
+        { time: '09:00 - 09:50', sectionA: 'ME463', sectionB: 'ME421', sectionC: 'ME411' },
+        { time: '09:50 - 10:40', sectionA: 'ME411', sectionB: 'ME463', sectionC: 'ME421' },
+        { time: '11:00 - 11:50', sectionA: 'ME421', sectionB: 'ME411', sectionC: 'ME463' },
+        { time: '11:50 - 12:40', sectionA: 'ELECTIVE', sectionB: 'ELECTIVE', sectionC: 'ELECTIVE' },
+        { time: '14:30 - 17:00', sectionB: 'ME422', sectionC: 'ME412' }
     ],
     wednesday: [
-        { time: '09:00 - 09:50', sectionA: 'ME417', sectionB: 'ME431', sectionC: 'ME461' },
-        { time: '09:50 - 10:40', sectionA: 'ME461', sectionB: 'ME417', sectionC: 'ME451' },
-        { time: '11:00 - 11:50', sectionA: 'ME451', sectionB: 'ME461', sectionC: 'ME431' },
-        { time: '11:50 - 12:40', sectionA: 'ME431', sectionB: 'ME451', sectionC: 'ME417' },
-        { time: '14:30 - 17:00', sectionA: 'ME432 (A1/A2)', sectionB: 'ME452 (B1/B2)' }
+        { time: '09:00 - 09:50', sectionA: 'ME421', sectionB: 'ME455' },
+        { time: '09:50 - 10:40', sectionA: 'ME455', sectionC: 'ME421' },
+        { time: '11:00 - 11:50', sectionB: 'ME421', sectionC: 'ME455' },
+        { time: '11:00 - 13:30', sectionA: 'ME456' },
+        { time: '14:30 - 17:00', sectionA: 'ME498', sectionB: 'ME498', sectionC: 'ME498' },
     ],
     thursday: [
-        { time: '09:00 - 09:50', sectionA: 'ME417', sectionB: 'ME451', sectionC: 'ME413' },
-        { time: '09:50 - 10:40', sectionA: 'ME451', sectionB: 'ME413', sectionC: 'ME417' },
-        { time: '11:00 - 11:50', sectionA: 'ME413', sectionB: 'ME417', sectionC: 'ME451' }
+        { time: '09:00 - 09:50', sectionA: 'ME421', sectionB: 'ME463', sectionC: 'ME455' },
+        { time: '09:50 - 10:40', sectionA: 'ME455', sectionB: 'ME421', sectionC: 'ME463' },
+        { time: '11:00 - 11:50', sectionA: 'ME463', sectionB: 'ME455', sectionC: 'ME421' },
+        { time: '14:30 - 17:00', sectionB: 'ME456' }
     ],
     friday: [],
     saturday: []
 };
 
 export const courseDetails: Record<string, CourseInfo> = {
-    ME413: {
-        name: 'Power Plant Engineering',
-        teachers: ['Dr. Bodius Salam', 'Dr. Kazi Afzalur Rahman'],
+    ME411: {
+        name: 'Applied Thermodynamics',
+        teachers: ['Dr. B. Salam'],
         sessional: false
     },
-    ME461: {
-        name: 'Production and Operations Management',
-        teachers: ['Dr. Md. Sanaul Rabbi', 'Dr. Md. Abu Mowazzem Hossain'],
+    ME421: {
+        name: 'Fluid Machinery',
+        teachers: ['Dr. M. M. Alam', 'Dr. M. M. Roshid'],
         sessional: false
     },
-    ME451: {
-        name: 'Machine Tools and Tool Engineering',
-        teachers: ['Dr. Md. Arafat Rahman', 'Mr. Redoy Masum Meraz'],
+    ME463: {
+        name: 'Industrial Management',
+        teachers: ['Dr. M. S. Rabbi', 'Dr. A. S. M. Sayem', 'Mr. A. A. Mamun'],
         sessional: false
     },
-    ME431: {
-        name: 'Machine Design-II',
-        teachers: ['Mr. Syed Masrur Ahmmad', 'Mr. Minhaz Ahmed'],
+    ME455: {
+        name: 'Mechatronics',
+        teachers: ['Dr. S. C. Banik', 'Dr. M. S. Rabbi'],
         sessional: false
     },
-    ME417: {
-        name: 'Refrigeration and Air-conditioning',
-        teachers: ['Dr. Jamal Uddin Ahamed', 'Mr. Md. Aminul Islam'],
+    ME415: {
+        name: 'Automobile Engineering',
+        teachers: ['Dr. M. M. Rahman', 'Dr. M. A. M. Hossain'],
         sessional: false
     },
-    ME452: {
-        name: 'Machine Tools and Tool Engineering',
-        teachers: ['Dr. Md. Sanaul Rabbi', 'Dr. Md. Arafat Rahman', 'Mr. Redoy Masum Meraz'],
+    ME423: {
+        name: 'Aerodynamics',
+        teachers: ['Dr. M. M. Alam', 'Dr. P. Das'],
+        sessional: false
+    },
+    ME469: {
+        name: 'Operations Research',
+        teachers: ['Mr. M. A. Islam', 'Mr. R. M. Meraz'],
+        sessional: false
+    },
+    ME412: {
+        name: 'Applied Thermodynamics Sessional',
+        teachers: ['Dr. B. Salam', 'Dr. S. M. H. Kabir', 'Dr. K. A. Rahman'],
         sessional: true
     },
-    ME432: {
-        name: 'Machine Design-II',
-        teachers: ['Mr. Syed Masrur Ahmmad', 'Mr. Redoy Masum Meraz', 'Mr. Minhaz Ahmed'],
+    ME422: {
+        name: 'Fluid Machinery Sessional',
+        teachers: ['Dr. M. M. Alam', 'Dr. P. Das', 'Dr. M. M. Roshid'],
         sessional: true
     },
-    ME494: {
+    ME456: {
+        name: 'Mechatronics Sessional',
+        teachers: ['Dr. S. C. Banik', 'Dr. M. S. Rabbi', 'Mr. R. M. Meraz'],
+        sessional: true
+    },
+    ME498: {
         name: 'Project and Thesis',
         teachers: ['Corresponding Supervisors'],
         sessional: true
     }
 };
+
+export const electiveCourses = ['ME415', 'ME423', 'ME469'];
 
 export const dayNames: DayName[] = [
     'sunday',

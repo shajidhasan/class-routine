@@ -3,10 +3,12 @@
 	import { slide } from 'svelte/transition';
 	import type { Section, ScheduleDay, ClassItem } from '$lib/types';
 	import { getScheduleData, formatTime, formatDate, formatTimeFromMinutes } from '$lib/utils';
-	import { dayLabels } from '$lib/data';
+	import { dayLabels, electiveCourses, courseDetails } from '$lib/data';
 
 	// STATE
 	let currentSection = $state<Section>('A');
+	let selectedElective = $state<string>('');
+	let showElectiveModal = $state<boolean>(false);
 	let currentTime = $state<Date>(new Date());
 	let isSimulating = $state<boolean>(false);
 	let simulatedDay = $state<number>(new Date().getDay());
@@ -15,6 +17,11 @@
 	onMount(() => {
 		const savedSection = localStorage.getItem('currentSection') as Section | null;
 		if (savedSection && ['A', 'B', 'C'].includes(savedSection)) currentSection = savedSection;
+
+		const savedElective = localStorage.getItem('selectedElective');
+		if (savedElective && electiveCourses.includes(savedElective)) {
+			selectedElective = savedElective;
+		}
 
 		const interval = setInterval(() => {
 			if (!isSimulating) {
@@ -44,6 +51,17 @@
 		localStorage.setItem('currentSection', currentSection);
 	});
 
+	$effect(() => {
+		if (selectedElective) {
+			localStorage.setItem('selectedElective', selectedElective);
+		}
+	});
+
+	function selectElective(course: string): void {
+		selectedElective = course;
+		showElectiveModal = false;
+	}
+
 	function scrollToCurrentClass(): void {
 		const currentClassElement = document.querySelector('.current-class');
 		if (currentClassElement) {
@@ -56,12 +74,12 @@
 	}
 
 	$effect(() => {
-		getScheduleData(currentTime, currentSection);
+		getScheduleData(currentTime, currentSection, selectedElective);
 		currentTime;
 		setTimeout(scrollToCurrentClass, 1000);
 	});
 
-	const schedule = $derived(getScheduleData(currentTime, currentSection));
+	const schedule = $derived(getScheduleData(currentTime, currentSection, selectedElective));
 </script>
 
 <main class="relative min-h-screen bg-gradient-to-br from-zinc-900 to-zinc-950">
@@ -70,8 +88,10 @@
 		<div class="px-4 py-4">
 			<div class="mb-3 flex items-center justify-between">
 				<div>
-					<h1 class="mb-1 text-xl font-semibold tracking-tight text-zinc-100">
-						ME '20 <span class="rounded-lg bg-zinc-800 px-2 py-1 text-sm">(4-1)</span>
+					<h1
+						class="mb-1 flex items-center gap-2 text-xl font-semibold tracking-tight text-zinc-100"
+					>
+						ME '20 <span class="rounded-lg bg-zinc-800 px-2 py-1 text-sm">(4-2)</span>
 					</h1>
 					<p class="text-sm text-zinc-400">{formatDate(currentTime)}</p>
 				</div>
@@ -162,87 +182,120 @@
 					{#each day.classes as classItem, index}
 						{@const isCurrentClass =
 							day.status?.status === 'ongoing' && day.status?.index === index}
+						{@const isElective = classItem.code === 'ELECTIVE'}
 						<div class="{day.highlight ? 'w-72' : 'w-56'} flex-shrink-0 snap-start">
-							<div
-								class="relative rounded-2xl border bg-zinc-900/80 backdrop-blur-sm transition-all duration-200 {isCurrentClass
-									? 'current-class border-emerald-600/50 shadow-lg ring-1 shadow-emerald-500/20 ring-emerald-500/20'
-									: 'border-zinc-800 hover:border-zinc-700 hover:shadow-md hover:shadow-zinc-900/50'} overflow-hidden"
+							<button
+								onclick={() => isElective && (showElectiveModal = true)}
+								disabled={!isElective}
+								class="group w-full text-left {isElective ? 'cursor-pointer' : 'cursor-default'}"
 							>
-								<!-- Time Badge -->
 								<div
-									class="absolute top-4 right-4 rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-1"
+									class="relative rounded-2xl border bg-zinc-900/80 backdrop-blur-sm transition-all duration-200 {isCurrentClass
+										? 'current-class border-emerald-600/50 shadow-lg ring-1 shadow-emerald-500/20 ring-emerald-500/20'
+										: isElective
+											? 'border-purple-700/60 group-hover:border-purple-600 group-hover:shadow-lg group-hover:ring-1 group-hover:shadow-purple-900/30 group-hover:ring-purple-600/30'
+											: 'border-zinc-800 hover:border-zinc-700 hover:shadow-md hover:shadow-zinc-900/50'} overflow-hidden"
 								>
-									<span class="text-xs font-medium text-zinc-300">{classItem.time}</span>
-								</div>
-
-								<!-- Class Type Indicator -->
-								<div class="absolute top-4 left-4">
+									<!-- Time Badge -->
 									<div
-										class="rounded-lg px-2 py-1 text-xs font-medium {classItem.sessional
-											? 'border border-orange-800/50 bg-orange-900/50 text-orange-300'
-											: 'border border-blue-800/50 bg-blue-900/50 text-blue-300'}"
+										class="absolute top-4 right-4 rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-1"
 									>
-										{classItem.sessional ? 'Lab' : 'Theory'}
-									</div>
-								</div>
-
-								<div class="p-4 pt-16">
-									<!-- Course Code -->
-									<div class="mb-2">
-										<h3
-											class="{day.highlight
-												? 'text-lg'
-												: 'text-base'} font-semibold tracking-tight {classItem.sessional
-												? 'bg-gradient-to-br from-orange-200 via-orange-500 to-orange-700 bg-clip-text text-transparent'
-												: 'bg-gradient-to-br from-blue-200 via-blue-500 to-blue-700 bg-clip-text text-transparent'}"
-										>
-											{classItem.code}
-										</h3>
+										<span class="text-xs font-medium text-zinc-300">{classItem.time}</span>
 									</div>
 
-									<!-- Course Name -->
-									<h4 class="mb-2 line-clamp-2 h-9 text-sm leading-tight text-zinc-100">
-										{classItem.name}
-									</h4>
+									<!-- Class Type Indicator or Elective Badge -->
+									<div class="absolute top-4 left-4">
+										{#if isElective}
+											<div
+												class="flex items-center gap-1 rounded-lg border border-purple-700/60 bg-purple-950/60 px-2 py-1 text-xs font-medium text-purple-300"
+											>
+												<span>📚</span>
+												<span>Tap to Select</span>
+											</div>
+										{:else}
+											<div
+												class="rounded-lg px-2 py-1 text-xs font-medium {classItem.sessional
+													? 'border border-orange-800/50 bg-orange-900/50 text-orange-300'
+													: 'border border-blue-800/50 bg-blue-900/50 text-blue-300'}"
+											>
+												{classItem.sessional ? 'Lab' : 'Theory'}
+											</div>
+										{/if}
+									</div>
 
-									<!-- Teachers -->
-									{#if day.highlight && classItem.teachers.length > 0}
-										<div class="flex h-15 flex-col justify-end gap-1">
-											{#each classItem.teachers as teacher}
-												<div class="flex items-center gap-2">
-													<div class="h-1 w-1 rounded-full bg-zinc-600"></div>
-													<span class="text-xs text-zinc-400">{teacher}</span>
+									<div class="p-4 pt-16">
+										<!-- Course Code -->
+										<div class="mb-2">
+											<h3
+												class="{day.highlight
+													? 'text-lg'
+													: 'text-base'} font-semibold tracking-tight {isElective
+													? 'bg-gradient-to-br from-purple-200 via-purple-500 to-purple-700 bg-clip-text text-transparent'
+													: classItem.sessional
+														? 'bg-gradient-to-br from-orange-200 via-orange-500 to-orange-700 bg-clip-text text-transparent'
+														: 'bg-gradient-to-br from-blue-200 via-blue-500 to-blue-700 bg-clip-text text-transparent'}"
+											>
+												{classItem.code}
+											</h3>
+										</div>
+
+										<!-- Course Name -->
+										<h4 class="mb-2 line-clamp-2 h-9 text-sm leading-tight text-zinc-100">
+											{classItem.name}
+										</h4>
+
+										<!-- Teachers -->
+										{#if day.highlight && classItem.teachers.length > 0}
+											<div class="flex h-15 flex-col justify-end gap-1">
+												{#each classItem.teachers as teacher}
+													<div class="flex items-center gap-2">
+														<div class="h-1 w-1 rounded-full bg-zinc-600"></div>
+														<span class="text-xs text-zinc-400">{teacher}</span>
+													</div>
+												{/each}
+											</div>
+										{/if}
+
+										<!-- Progress Bar -->
+										{#if isCurrentClass && day.status?.progress !== undefined}
+											<div class="mt-4 border-t border-emerald-800/50 pt-4">
+												<div class="mb-2 flex items-center justify-between">
+													<span class="text-xs font-medium text-emerald-300">In Progress</span>
+													<span class="text-xs text-emerald-400"
+														>{Math.round(day.status.progress)}%</span
+													>
 												</div>
-											{/each}
-										</div>
+												<div class="h-1.5 overflow-hidden rounded-full bg-emerald-900/50">
+													<div
+														class="h-full bg-emerald-400 transition-all duration-1000"
+														style="width: {day.status.progress}%"
+													></div>
+												</div>
+											</div>
+										{/if}
+									</div>
+
+									<!-- Current Class Glow -->
+									{#if isCurrentClass}
+										<div
+											class="pointer-events-none absolute inset-0 rounded-2xl bg-emerald-500/5"
+										></div>
 									{/if}
 
-									<!-- Progress Bar -->
-									{#if isCurrentClass && day.status?.progress !== undefined}
-										<div class="mt-4 border-t border-emerald-800/50 pt-4">
-											<div class="mb-2 flex items-center justify-between">
-												<span class="text-xs font-medium text-emerald-300">In Progress</span>
-												<span class="text-xs text-emerald-400"
-													>{Math.round(day.status.progress)}%</span
-												>
-											</div>
-											<div class="h-1.5 overflow-hidden rounded-full bg-emerald-900/50">
-												<div
-													class="h-full bg-emerald-400 transition-all duration-1000"
-													style="width: {day.status.progress}%"
-												></div>
+									<!-- Elective Click Hint -->
+									{#if isElective}
+										<div
+											class="pointer-events-none absolute inset-0 flex items-center justify-center rounded-2xl bg-purple-500/0 transition-all group-hover:bg-purple-500/5"
+										>
+											<div
+												class="rounded-full border border-purple-600/0 bg-purple-900/0 px-3 py-1 text-xs font-medium text-purple-300 opacity-0 transition-all group-hover:border-purple-600/50 group-hover:bg-purple-900/50 group-hover:opacity-100"
+											>
+												Click to Choose
 											</div>
 										</div>
 									{/if}
 								</div>
-
-								<!-- Current Class Glow -->
-								{#if isCurrentClass}
-									<div
-										class="pointer-events-none absolute inset-0 rounded-2xl bg-emerald-500/5"
-									></div>
-								{/if}
-							</div>
+							</button>
 						</div>
 					{/each}
 				</div>
@@ -260,6 +313,86 @@
 			>
 		</p>
 	</footer>
+
+	<!-- Elective Course Selection Modal -->
+	{#if showElectiveModal}
+		<div
+			class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+			role="button"
+			tabindex="0"
+			onclick={() => (showElectiveModal = false)}
+			onkeydown={(e) => e.key === 'Escape' && (showElectiveModal = false)}
+		>
+			<div
+				class="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-900 p-6 shadow-2xl"
+				role="dialog"
+				aria-modal="true"
+				aria-labelledby="elective-modal-title"
+				tabindex="-1"
+				onclick={(e) => e.stopPropagation()}
+				onkeydown={(e) => e.stopPropagation()}
+				transition:slide
+			>
+				<div class="mb-6 flex items-center justify-between">
+					<h3 id="elective-modal-title" class="text-xl font-semibold text-zinc-100">
+						Select Your Elective
+					</h3>
+					<button
+						onclick={() => (showElectiveModal = false)}
+						aria-label="Close elective selection"
+						class="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-zinc-200"
+					>
+						✕
+					</button>
+				</div>
+
+				<div class="space-y-3">
+					{#each electiveCourses as course}
+						<button
+							onclick={() => selectElective(course)}
+							class="group relative w-full overflow-hidden rounded-xl border border-zinc-700 bg-zinc-800 p-4 text-left transition-all duration-200 {selectedElective ===
+							course
+								? 'border-blue-600 ring-2 ring-blue-600/50'
+								: 'hover:bg-zinc-750 hover:border-zinc-600'}"
+						>
+							<div class="flex items-start justify-between">
+								<div class="flex-1">
+									<div class="mb-1 flex items-center gap-2">
+										<h4 class="font-semibold text-zinc-100">{course}</h4>
+										{#if selectedElective === course}
+											<div
+												class="rounded-lg bg-blue-900/50 px-2 py-0.5 text-xs font-medium text-blue-300"
+											>
+												Selected
+											</div>
+										{/if}
+									</div>
+									<p class="mb-2 text-sm text-zinc-300">{courseDetails[course]?.name}</p>
+									<div class="flex flex-wrap gap-1">
+										{#each courseDetails[course]?.teachers || [] as teacher}
+											<span class="text-xs text-zinc-500">{teacher}</span>
+											{#if courseDetails[course]?.teachers.indexOf(teacher) !== (courseDetails[course]?.teachers.length || 0) - 1}
+												<span class="text-xs text-zinc-600">•</span>
+											{/if}
+										{/each}
+									</div>
+								</div>
+								{#if selectedElective === course}
+									<div class="text-blue-400">✓</div>
+								{/if}
+							</div>
+						</button>
+					{/each}
+				</div>
+
+				{#if selectedElective}
+					<div class="mt-4 rounded-xl border border-emerald-800/50 bg-emerald-950/30 p-3">
+						<p class="text-center text-sm text-emerald-300">✓ Your selection has been saved</p>
+					</div>
+				{/if}
+			</div>
+		</div>
+	{/if}
 
 	<!-- Time Simulator FAB -->
 	<div class="fixed right-4 bottom-4 z-50">
