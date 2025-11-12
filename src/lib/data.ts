@@ -33,7 +33,7 @@ export const routine: Record<DayName, TimeSlot[]> = {
         { time: '09:00 - 09:50', sectionA: 'ME421', sectionB: 'ME463', sectionC: 'ME455' },
         { time: '09:50 - 10:40', sectionA: 'ME455', sectionB: 'ME421', sectionC: 'ME463' },
         { time: '11:00 - 11:50', sectionA: 'ME463', sectionB: 'ME455', sectionC: 'ME421' },
-        { time: '14:30 - 17:00', sectionB: 'ME456' }
+        { time: '14:30 - 17:00', sectionA: 'ME422', sectionB: 'ME456' }
     ],
     friday: [],
     saturday: []
